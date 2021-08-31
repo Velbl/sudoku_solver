@@ -1,3 +1,4 @@
+# insert wanted sudoku board
 sudoku_board = [[8, 1, 0, 0, 3, 0, 0, 2, 7],
                 [0, 6, 2, 0, 5, 0, 0, 9, 0],
                 [0, 7, 0, 0, 0, 8, 0, 0, 0],
@@ -8,7 +9,7 @@ sudoku_board = [[8, 1, 0, 0, 3, 0, 0, 2, 7],
                 [0, 2, 0, 0, 1, 0, 7, 5, 0],
                 [3, 8, 0, 0, 7, 0, 0, 4, 2]]
 
-
+# dictionary holding staring position of each box
 box_positions = {1: [0, 0],
                  2: [0, 3],
                  3: [0, 6],
@@ -19,23 +20,23 @@ box_positions = {1: [0, 0],
                  8: [6, 3],
                  9: [6, 6]}
 
+# entire number of rows and columns
+num_row = len(sudoku_board)
+num_col = len(sudoku_board[0])
+
 
 def print_board(board):
-    # entire number of rows and columns
-    num_row = len(board)
-    num_col = len(board[0])
-
-    # number of rows and columns inside one block
-    num_row_block = num_row / 3
-    num_col_block = num_col / 3
+    # number of rows and columns inside one box
+    num_row_box = num_row / 3
+    num_col_box = num_col / 3
 
     # printing
     for row in range(num_row):
-        if row % num_row_block == 0:
+        if row % num_row_box == 0:
             print(" ══════   ══════  ══════ ")
 
         for col in range(num_col):
-            if col % num_col_block == 0:
+            if col % num_col_box == 0:
                 print("║", end=" ")
             print(board[row][col], end=" ")
         print("║")
@@ -44,8 +45,6 @@ def print_board(board):
 
 def find_zero(board):
     zero_position = [None, None]
-    num_row = len(board)
-    num_col = len(board[0])
 
     for row in range(num_row):
         for col in range(num_col):
@@ -58,22 +57,20 @@ def find_zero(board):
 
 def is_valid(board, row, col, value):
     start_position = [0, 0]
-    is_valid = True
+    return_value = False
 
-    if row < len(board) and col < len(board[0]):
+    if row < num_row and col < num_col:
         # check value inside columns
-        for _row in range(len(board)):
+        for _row in range(num_row):
             if board[_row][col] == value:
                 #print("There is already " + str(value) + " in the same column.")
-                is_valid = False
-                return(is_valid)
+                return_value = False
 
         # check value inside rows
-        for _col in range(len(board[0])):
+        for _col in range(num_col):
             if board[row][_col] == value:
                 #print("There is already " + str(value) + " in the same row.")
-                is_valid = False
-                return(is_valid)
+                return_value = False
 
         # check value inside box
         box = get_box_number(row, col)
@@ -92,8 +89,8 @@ def is_valid(board, row, col, value):
             _col = start_position[1]
     else:
         print("Invalid number of cell.")
-
-    return is_valid
+    return_value = True
+    return return_value
 
 
 def get_box_number(row, col):
@@ -121,6 +118,7 @@ def get_box_number(row, col):
     return box
 
 
+# holding position of last zero value
 last_zero_position = [0][0]
 
 
